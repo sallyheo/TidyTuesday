@@ -29,7 +29,7 @@ christmas %>% #Using christmas dataframe
   scale_x_continuous(limits = c(0, 20))+ #Setting x-axis limits from 0 to 20
   theme_few()+ #Theme few 
   theme(title = element_text(size = 12, color = "red1"))+ #Editing title of plot and color
-        axis.text = element_text(color = "red1", family = "Cambria")+
+        axis.text = element_text(color = "red1", family = "Cambria")+ #changing element text to cambria
   labs(title = "Christmas Billboard Top 100 Songs", #Giving title to plot
        subtitle = "From Years 2000 to 2017", #Giving subtitle
        x = "Number of Weeks on Christmas Billboard Chart", #Giving x-axis name
@@ -37,6 +37,6 @@ christmas %>% #Using christmas dataframe
        fill = "Weeks On Chart", #Labeling Legend title
        caption = "Source: Kaggle") #Giving caption
 ggsave(here("TidyTuesday_6", "Output", "christmassongs.png"), #Save here
-       width = 10, height = 7) #Save in inches the width and height
+       width = 12, height = 9) #Save in inches the width and height
 
 #######################################################################################################
