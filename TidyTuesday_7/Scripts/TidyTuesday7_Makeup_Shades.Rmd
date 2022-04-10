@@ -1,0 +1,74 @@
+---
+title: 'Tidy Tuesday 7: Makeup Shades'
+author: "Sally Heo"
+date: "4/8/2022"
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,#always show the code
+                      warning = FALSE) #Never show a warning
+```
+
+## Load Libraries Needed to code ##
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)#Load tidyverse
+library(here)#Load here
+library(ggthemes)#Load ggthemes
+```
+
+## Load Makeup Shades Data ##
+```{r, message=FALSE, warning=FALSE}
+allShades <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-30/allShades.csv')
+View(allShades)
+```
+## Data Wrangling ##
+```{r}
+all2 <- allShades %>% 
+  select(brand, product, hue, sat, lightness) #choose only these variables
+View(all2)
+```
+
+## GG Plot ##
+```{r makeupshades, fig.height=20, fig.width=18, fig.align="center",message=FALSE, warning=FALSE}
+all2 %>% 
+  ggplot(aes(x = lightness,#Plot x-axis as lightness
+             y = hue, #Plot y-axis as hue
+             color = lightness,#Giving color to lightness variable
+             ))+
+  geom_point(stat = "identity", show.legend = FALSE)+ #Geometry point and hiding legend
+  geom_smooth(method = "lm")+ #Geometry smooth with linear line
+  scale_y_continuous(limits = c(0, 50))+ #Setting y-axis limits
+  theme_bw()+ #Theme bw
+  theme(text = element_text(size = 18, #changing text size to everything
+                            face = "bold"), #Making text size bold
+        axis.title = element_text(size = 26, #changing axis title to different size
+                                  color = "deeppink1"), #changing axis title color
+        axis.text = element_text(size = 18, #changing the x and y axis text to a certain size
+                                 color = "black"),#changing the axis.text to black
+        plot.title = element_text(color = "gray1",#changing plot title color
+                                  hjust = 0.5, #Plot title is positioned towards the center
+                                  size = 30),#changing plot title size
+        plot.subtitle = element_text(color = "black", #changing plot subtitle to black
+                                     size = 28,#changing size to 28
+                                     hjust = 0.5),#Subtitle positioned towards the center
+        plot.caption = element_text(color = "gray3",#changing caption color to gray3
+                                    size = 26, #changing the size to 26
+                                    hjust = 0.5),#caption is positioned towards the center
+        strip.text = element_text(size = 16))+ #changing the text size of facet wrap
+  labs(title = "The relationship between Hue and Lightness of Various Foundation Makeup Brands", #Giving title to plot
+       subtitle = "Closer to 0 is pure black and 1 is pure white",#Giving subtitle
+       caption = "Source: The Pudding",#Giving caption (source)
+       x = "Lightness", #Editing x-axis title to Lightness
+       y = "Hue") +#Editing y-axis title to Hue
+  facet_wrap(~brand) #Faceting and making smaller plots of our data
+ggsave(here("TidyTuesday_7", "Output", "makeupshades.pdf"), #Save here
+       width = 30, height = 25) #Size of plot in inches
+  
+```
+
+
+
+
