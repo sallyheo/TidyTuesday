@@ -1,0 +1,75 @@
+---
+title: 'Tidy Tuesday 8: Airline Safety'
+author: "Sally Heo"
+date: "4/16/2022"
+output:
+  prettydoc::html_pretty:
+    theme: tactile
+---
+
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load Libraries needed to code ##
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)#Load tidyverse
+library(here) #Load here
+library(ggthemes) #Load ggthemes
+library(DataExplorer) #Load DataExplorer
+library(paletteer) #Load paletteer
+library(viridis) #Load viridis
+```
+## Load Data ##
+```{r, warning=FALSE, message=FALSE}
+Airline <- read_csv(here("TidyTuesday_8", "Data",  "week19_airline_safety.csv")) #Load Airline Data
+glimpse(Airline)#Glimpse Airline
+View(Airline)#View Airline data
+```
+## DataExplorer ##
+```{r}
+create_report(Airline)#Create Data Profiling Report of Airline Data
+```
+## Data Wrangling ##
+```{r}
+Air <- Airline %>% #Giving object to Airline Data
+  select(airline, year_range, type_of_event, n_events) #Choosing these specific columns
+View(Air) #View Air Data quickly
+```
+## GG Plot ##
+```{r, fig.height=10, fig.width=12, message=FALSE, warning=FALSE}
+Air %>% #Using Air Dataframe
+  ggplot(aes(x = year_range, #Plot x-axis as year_range
+             y = n_events,#Plot y-axis as n_events
+             color = year_range))+ #Giving color to year_range
+  geom_boxplot()+ #Giving geometry point, boxplot
+  facet_wrap(~type_of_event, scales="free")+ #Sectioning to small graph based on type of event, releases both the x and y-axis
+  theme_solarized()+ #Theme solarized
+  theme(text = element_text(size = 20,#changing the text size to everything
+                            face = "bold"), #Making text size bold
+        axis.title = element_text(size = 18, #changing axis title to a different size
+                                  color = "deepskyblue3"), #changing axis title color
+        plot.title = element_text(color = "black",#changing plot title color
+                                  hjust = 0.5, #Plot title is positionined towards the center
+                                  size = 20),#Changing plot title size
+        plot.subtitle = element_text(color = "black", #changing plot subtitle to black
+                                     size = 18, #changing plot subtitle size to 18
+                                     hjust = 0.5),#Subtitle positioned towards the center
+        plot.caption = element_text(color = "gray3",#changing caption color to gray
+                                    size = 16, #changing the size to 16
+                                    hjust = 0.5),#Caption is positioned towards the center
+        strip.text = element_text(size = 18), #Changing the text size of facet wrap
+        strip.background = element_rect(fill="lightblue", size=1, color="dodgerblue"))+ #changing the facet wrap title background to dodgerblue
+  guides(color = FALSE)+ #Getting rid of legend
+  labs(title = "Airline Safety", #Giving title to plot
+       subtitle = "Total Number of Airline Incidents, Fatalities, and Fatal Accidents from 1985-1999 to 2000-2014", #Giving subtitle to plot
+       caption = "Source: fivethirtyeight.com",#Giving caption
+       x = "Year", #Editing the name of x-axis to Year
+       y = "Number of Accidents") #Editing the name of y-axis to Number of Accidents
+ggsave(here("TidyTuesday_8", "Output", "AirlineSafety.pdf"),#Save here
+       width = 14, height = 10) #Width and height in inches
+```
+
+
+
+
